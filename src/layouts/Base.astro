@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'mtdnot blog' } = Astro.props;
+const allPosts = await getCollection('posts');
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml" />
+</head>
+<body>
+  <div class="container">
+    <main class="main">
+      <slot />
+    </main>
+    <aside class="sidebar">
+      <div class="author">
+        <img src="/avatar.png" alt="mtdnot" class="avatar">
+        <div class="author-name">mtdnot</div>
+        <div class="social-links">
+          <a href="https://github.com/mtdnot" target="_blank">GitHub</a>
+          <a href="https://x.com/mtdnot" target="_blank">X</a>
+          <a href="/rss.xml">RSS</a>
+        </div>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" placeholder="Search..." id="search">
+      </div>
+      
+      <div class="section">
+        <h3>ページ</h3>
+        <ul>
+          <li><a href="/">ホーム</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+      
+      <div class="section">
+        <h3>最近の投稿</h3>
+        <ul>
+          {recentPosts.map(post => (
+            <li><a href={`/posts/${post.id}`}>{post.data.title}</a></li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

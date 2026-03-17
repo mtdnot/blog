@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Base title="mtdnot blog">
+  <div class="post-list">
+    <h1>投稿一覧</h1>
+    {sortedPosts.map(post => (
+      <article class="post-item">
+        <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+        {post.data.description && <p class="post-excerpt">{post.data.description}</p>}
+        <div class="post-date">{post.data.date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</div>
+      </article>
+    ))}
+  </div>
+</Base>
