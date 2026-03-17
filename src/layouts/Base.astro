@@ -11,6 +11,7 @@ const allPosts = await getCollection('posts');
 const recentPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 5);
+const base = import.meta.env.BASE_URL;
 ---
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@ const recentPosts = allPosts
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS" href={`${base}rss.xml`} />
 </head>
 <body>
   <div class="container">
@@ -28,12 +29,12 @@ const recentPosts = allPosts
     </main>
     <aside class="sidebar">
       <div class="author">
-        <img src="/avatar.png" alt="mtdnot" class="avatar">
+        <img src={`${base}avatar.png`} alt="mtdnot" class="avatar">
         <div class="author-name">mtdnot</div>
         <div class="social-links">
           <a href="https://github.com/mtdnot" target="_blank">GitHub</a>
           <a href="https://x.com/mtdnot" target="_blank">X</a>
-          <a href="/rss.xml">RSS</a>
+          <a href={`${base}rss.xml`}>RSS</a>
         </div>
       </div>
       
@@ -44,8 +45,8 @@ const recentPosts = allPosts
       <div class="section">
         <h3>ページ</h3>
         <ul>
-          <li><a href="/">ホーム</a></li>
-          <li><a href="/about">About</a></li>
+          <li><a href={base}>ホーム</a></li>
+          <li><a href={`${base}about`}>About</a></li>
         </ul>
       </div>
       
@@ -53,7 +54,7 @@ const recentPosts = allPosts
         <h3>最近の投稿</h3>
         <ul>
           {recentPosts.map(post => (
-            <li><a href={`/posts/${post.id}`}>{post.data.title}</a></li>
+            <li><a href={`${base}posts/${post.id}`}>{post.data.title}</a></li>
           ))}
         </ul>
       </div>
