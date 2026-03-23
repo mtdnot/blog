@@ -21,9 +21,18 @@ content = content.replace(
   '/images/directus/$1.png'
 );
 
-// 最初の画像をOGP用に抽出
-const imageMatch = content.match(/!\[.*?\]\((\/images\/directus\/[^)]+)\)/);
-const ogImage = imageMatch ? `https://blog.mtdnot.dev${imageMatch[1]}` : '';
+// OGP画像を決定（優先順位: cover_image > 最初の画像 > デフォルト）
+let ogImage = '';
+if (doc.cover_image) {
+  // cover_imageがあればそれを使用
+  ogImage = `https://blog.mtdnot.dev/images/directus/${doc.cover_image}.png`;
+} else {
+  // なければ記事内の最初の画像を自動抽出
+  const imageMatch = content.match(/!\[.*?\]\((\/images\/[^)]+)\)/);
+  if (imageMatch) {
+    ogImage = `https://blog.mtdnot.dev${imageMatch[1]}`;
+  }
+}
 
 const html = marked.parse(content);
 ---
