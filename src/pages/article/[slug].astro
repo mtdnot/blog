@@ -21,10 +21,14 @@ content = content.replace(
   '/images/directus/$1.png'
 );
 
+// 最初の画像をOGP用に抽出
+const imageMatch = content.match(/!\[.*?\]\((\/images\/directus\/[^)]+)\)/);
+const ogImage = imageMatch ? `https://blog.mtdnot.dev${imageMatch[1]}` : '';
+
 const html = marked.parse(content);
 ---
 
-<Base title={doc.title}>
+<Base title={doc.title} description={doc.summary || ''} image={ogImage}>
   <article class="post-content">
     <header class="post-header">
       <h1>{doc.title}</h1>

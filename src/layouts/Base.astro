@@ -4,14 +4,18 @@ import { getCollection } from 'astro:content';
 
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
 }
 
-const { title = 'mtdnot blog' } = Astro.props;
+const { title = 'mtdnot blog', description = '', image = '' } = Astro.props;
 const allPosts = await getCollection('posts');
 const recentPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 5);
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+const siteUrl = 'https://blog.mtdnot.dev';
+const ogImage = image || `${siteUrl}/avatar.png`;
 ---
 
 <!DOCTYPE html>
@@ -20,6 +24,21 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
+  <meta name="description" content={description} />
+  
+  <!-- OGP -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="mtdnot blog" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  
   <link rel="alternate" type="application/rss+xml" title="RSS" href={`${base}rss.xml`} />
 </head>
 <body>
@@ -37,11 +56,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           <a href={`${base}rss.xml`}>RSS</a>
         </div>
       </div>
-      
       <div class="search-box">
         <input type="text" placeholder="Search..." id="search">
       </div>
-      
       <div class="section">
         <h3>ページ</h3>
         <ul>
@@ -50,18 +67,16 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           <li><a href={`${base}about/`}>About</a></li>
         </ul>
       </div>
-      
       <div class="section">
         <h3>最近の投稿</h3>
         <ul>
           {recentPosts.map(post => (
-            <li><a href={`${base}posts/${post.id}/`}>{post.data.title}</a></li>
+            <li><a href={`${base}posts/${post.slug}/`}>{post.data.title}</a></li>
           ))}
         </ul>
       </div>
-      
       <!-- 追加サイドバーコンテンツ用スロット -->
-      <slot name="sidebar-extra" />
+      <slot name="sidebar" />
     </aside>
   </div>
 </body>
