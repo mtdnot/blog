@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [directus-update]
 
 jobs:
   deploy:
@@ -22,6 +24,11 @@ jobs:
           
       - name: Install dependencies
         run: npm ci
+        
+      - name: Fetch images from Directus
+        run: node scripts/fetch-images.mjs
+        env:
+          DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
         
       - name: Build
         run: npm run build

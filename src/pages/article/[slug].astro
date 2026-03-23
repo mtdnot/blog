@@ -13,7 +13,15 @@ export async function getStaticPaths() {
 }
 
 const { doc } = Astro.props;
-const html = doc.content ? marked.parse(doc.content) : '';
+
+// Directus画像URLをローカルパスに変換
+let content = doc.content || '';
+content = content.replace(
+  /https:\/\/directus\.mtdnot\.dev\/assets\/([a-f0-9-]+)/g,
+  '/images/directus/$1.png'
+);
+
+const html = marked.parse(content);
 ---
 
 <Base title={doc.title}>
