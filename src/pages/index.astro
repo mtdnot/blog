@@ -1,20 +1,100 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { getDocuments, getProjects } from '../lib/directus';
 
-const posts = await getCollection('posts');
-const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// クリアランス0 かつ project_id必須 のドキュメントを取得
+const allDocs = await getDocuments();
+const publicDocs = allDocs.filter(d => d.clearance === 0 && d.project_id);
+
+// プロジェクト名マップ
+const projects = await getProjects();
+const projectMap = new Map(projects.map(p => [p.id, p.name]));
+
+// 日付でソート
+const sortedDocs = publicDocs.sort((a, b) => 
+  new Date(b.date_created).getTime() - new Date(a.date_created).getTime()
+);
 ---
 
 <Base title="mtdnot blog">
   <div class="post-list">
-    <h1>投稿一覧</h1>
-    {sortedPosts.map(post => (
-      <article class="post-item">
-        <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
-        {post.data.description && <p class="post-excerpt">{post.data.description}</p>}
-        <div class="post-date">{post.data.date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</div>
-      </article>
-    ))}
+    <h1>公開記事</h1>
+    {sortedDocs.length === 0 ? (
+      <p class="empty">公開記事がありません</p>
+    ) : (
+      sortedDocs.map(doc => (
+        <article class="post-item">
+          <h2><a href={`/docs/${doc.slug}`}>{doc.title}</a></h2>
+          {doc.summary && <p class="post-excerpt">{doc.summary}</p>}
+          <div class="post-meta">
+            <span class="post-date">{new Date(doc.date_created).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</span>
+            {doc.project_id && (
+              <span class="post-project">{projectMap.get(doc.project_id)}</span>
+            )}
+          </div>
+        </article>
+      ))
+    )}
   </div>
 </Base>
+
+<style>
+  .post-list h1 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .empty {
+    color: #666;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .post-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #333;
+  }
+  
+  .post-item:last-child {
+    border-bottom: none;
+  }
+  
+  .post-item h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+  }
+  
+  .post-item h2 a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .post-item h2 a:hover {
+    color: #6db3f2;
+  }
+  
+  .post-excerpt {
+    color: #888;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .post-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .post-date {
+    color: #666;
+    font-size: 0.85rem;
+  }
+  
+  .post-project {
+    background: #2a4a6a;
+    color: #8bc4ff;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+</style>

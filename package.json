@@ -9,8 +9,9 @@
     "deploy": "astro build && wrangler pages deploy dist"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.0",
     "astro": "^5.0.0",
-    "@astrojs/rss": "^4.0.0"
+    "marked": "^17.0.5"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

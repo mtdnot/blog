@@ -1,0 +1,283 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getDocuments, getProjects, getAssetUrl } from '../../lib/directus';
+
+const allDocs = await getDocuments();
+const projects = await getProjects();
+
+const projectMap = new Map(projects.map(p => [p.id, p.name]));
+
+// メイン表示用: project_idがあるもののみ
+const docs = allDocs.filter(d => d.project_id);
+
+// その他（project_idなし）
+const otherDocs = allDocs.filter(d => !d.project_id);
+
+const clearanceLabels: Record<number, string> = {
+  0: 'PUBLIC',
+  1: 'INTERNAL',
+  2: 'CONFIDENTIAL',
+  3: 'SECRET',
+  4: 'TOP SECRET',
+  5: 'CLASSIFIED',
+};
+
+const clearanceColors: Record<number, string> = {
+  0: '#4caf50',
+  1: '#2196f3',
+  2: '#ff9800',
+  3: '#f44336',
+  4: '#9c27b0',
+  5: '#000000',
+};
+
+// プロジェクトごとにグループ化
+const byProject = allDocs.reduce((acc, doc) => {
+  const projectId = doc.project_id || 'none';
+  if (!acc[projectId]) acc[projectId] = [];
+  acc[projectId].push(doc);
+  return acc;
+}, {} as Record<string, typeof allDocs>);
+
+// 最近更新されたドキュメント（project_idありのみ）
+const recent = [...docs].sort((a, b) => 
+  new Date(b.date_updated || b.date_created).getTime() - 
+  new Date(a.date_updated || a.date_created).getTime()
+).slice(0, 10);
+
+const allLevels = [5, 4, 3, 2, 1, 0];
+---
+
+<Base title="Docs">
+  <div class="docs-page">
+    <h1>Documents</h1>
+    <p class="subtitle">認定ドキュメント（{docs.length}件）</p>
+    
+    <div class="filters">
+      <label for="clearance-filter">Clearance:</label>
+      <select id="clearance-filter">
+        <option value="all">All Levels</option>
+        {allLevels.map(level => (
+          <option value={level}>L{level} - {clearanceLabels[level]}</option>
+        ))}
+      </select>
+    </div>
+    
+    {docs.length === 0 ? (
+      <p class="empty">認定ドキュメントがありません（project_idが設定されたドキュメントのみ表示）</p>
+    ) : (
+      <div class="docs-grid" id="docs-grid">
+        {docs.map(doc => (
+          <a href={`/docs/${doc.slug}`} class="doc-card" data-clearance={doc.clearance ?? 0}>
+            {doc.cover_image && (
+              <img src={getAssetUrl(doc.cover_image)} alt={doc.title} class="cover" />
+            )}
+            <div class="content">
+              <span class="clearance-badge" style={`background: ${clearanceColors[doc.clearance ?? 0]}`}>
+                L{doc.clearance ?? 0}
+              </span>
+              <h3>{doc.title}</h3>
+              {doc.project_id && (
+                <span class="project">{projectMap.get(doc.project_id) || 'Unknown'}</span>
+              )}
+              <div class="meta">
+                <time>{new Date(doc.date_created).toLocaleDateString('ja-JP')}</time>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+  
+  <!-- サイドバー追加コンテンツ -->
+  <div slot="sidebar-extra">
+    <div class="section">
+      <h3>Recent Updates</h3>
+      <ul>
+        {recent.slice(0, 5).map(doc => (
+          <li>
+            <a href={`/docs/${doc.slug}`}>{doc.title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h3>Projects</h3>
+      <ul>
+        {projects.map(project => {
+          const count = byProject[project.id]?.length || 0;
+          
+          return (
+            <li>
+              <a href={`/docs/project/${project.id}`}>
+                {project.name} <span class="count">({count})</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+    
+    {otherDocs.length > 0 && (
+      <div class="section">
+        <h3>その他</h3>
+        <p class="other-info">未整理: {otherDocs.length}件</p>
+        <a href="/docs/project/none" class="other-link">一覧を見る →</a>
+      </div>
+    )}
+  </div>
+  
+  <script>
+    const filter = document.getElementById('clearance-filter') as HTMLSelectElement;
+    const cards = document.querySelectorAll('.doc-card');
+    
+    filter?.addEventListener('change', () => {
+      const value = filter.value;
+      cards.forEach(card => {
+        const el = card as HTMLElement;
+        if (value === 'all') {
+          el.style.display = '';
+        } else {
+          const clearance = el.dataset.clearance;
+          el.style.display = clearance === value ? '' : 'none';
+        }
+      });
+    });
+  </script>
+</Base>
+
+<style>
+  .docs-page h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+  
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+  
+  .filters label {
+    color: #888;
+    font-size: 0.9rem;
+  }
+  
+  .filters select {
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .doc-card {
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background: #1a1a1a;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  
+  .doc-card:hover {
+    border-color: #555;
+    transform: translateY(-2px);
+  }
+  
+  .cover {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    background: #2a2a2a;
+  }
+  
+  .doc-card .content {
+    padding: 0.6rem;
+  }
+  
+  .clearance-badge {
+    display: inline-block;
+    color: white;
+    padding: 0.08rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.55rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+  
+  .doc-card h3 {
+    font-size: 0.8rem;
+    margin: 0 0 0.3rem 0;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .project {
+    display: inline-block;
+    background: #2a4a6a;
+    color: #8bc4ff;
+    padding: 0.08rem 0.25rem;
+    border-radius: 3px;
+    font-size: 0.55rem;
+  }
+  
+  .meta {
+    font-size: 0.65rem;
+    color: #666;
+    margin-top: 0.25rem;
+  }
+  
+  .count {
+    color: #666;
+    font-size: 0.85em;
+  }
+  
+  .empty {
+    color: #666;
+    text-align: center;
+    padding: 2rem;
+    background: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+  
+  .other-info {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .other-link {
+    color: #6db3f2;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+  
+  .other-link:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Docs - mtdnot' } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+</head>
+<body>
+  <nav class="docs-nav">
+    <a href={base} class="logo">mtdnot</a>
+    <div class="nav-links">
+      <a href={base}>Blog</a>
+      <a href={`${base}docs/`}>Docs</a>
+      <a href={`${base}about/`}>About</a>
+    </div>
+  </nav>
+  <slot />
+</body>
+</html>
+
+<style is:global>
+  .docs-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #111;
+    border-bottom: 1px solid #333;
+  }
+  
+  .docs-nav .logo {
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+  
+  .docs-nav .nav-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .docs-nav .nav-links a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .docs-nav .nav-links a:hover {
+    color: #fff;
+  }
+</style>
