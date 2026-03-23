@@ -1,6 +1,6 @@
 // Directus API client
 const DIRECTUS_URL = 'https://directus.mtdnot.dev';
-const DIRECTUS_TOKEN = '181f69a0240049cb15c4267cf5a0a5f9f22571e221531c9c817c5f4ad4d604d0';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || '181f69a0240049cb15c4267cf5a0a5f9f22571e221531c9c817c5f4ad4d604d0';
 
 const headers: HeadersInit = { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` };
 
@@ -25,7 +25,8 @@ export interface Project {
 }
 
 export async function getDocuments(projectId?: string): Promise<Document[]> {
-  let url = `${DIRECTUS_URL}/items/documents?fields=id,title,slug,summary,tags,clearance,date_created,date_updated,cover_image,project_id`;
+  // contentも取得
+  let url = `${DIRECTUS_URL}/items/documents?fields=id,title,slug,content,summary,tags,clearance,date_created,date_updated,cover_image,project_id`;
   url += '&filter[status][_eq]=published';
   
   if (projectId) {
@@ -40,7 +41,7 @@ export async function getDocuments(projectId?: string): Promise<Document[]> {
 }
 
 export async function getDocument(slug: string): Promise<Document | null> {
-  const url = `${DIRECTUS_URL}/items/documents?filter[slug][_eq]=${encodeURIComponent(slug)}`;
+  const url = `${DIRECTUS_URL}/items/documents?filter[slug][_eq]=${encodeURIComponent(slug)}&fields=*`;
   const res = await fetch(url, { headers });
   const json = await res.json();
   return json.data?.[0] || null;
