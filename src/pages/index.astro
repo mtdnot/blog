@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { getDocuments, getProjects } from '../lib/directus';
 
-// クリアランス0 かつ project_id必須 のドキュメントを取得
+// L0のみ取得
 const allDocs = await getDocuments();
 const publicDocs = allDocs.filter(d => d.clearance === 0 && d.project_id);
 
@@ -24,7 +24,7 @@ const sortedDocs = publicDocs.sort((a, b) =>
     ) : (
       sortedDocs.map(doc => (
         <article class="post-item">
-          <h2><a href={`/docs/${doc.slug}`}>{doc.title}</a></h2>
+          <h2><a href={`/article/${doc.slug}`}>{doc.title}</a></h2>
           {doc.summary && <p class="post-excerpt">{doc.summary}</p>}
           <div class="post-meta">
             <span class="post-date">{new Date(doc.date_created).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</span>
@@ -60,7 +60,7 @@ const sortedDocs = publicDocs.sort((a, b) =>
   }
   
   .post-item h2 {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.5rem;
     font-size: 1.25rem;
   }
   
