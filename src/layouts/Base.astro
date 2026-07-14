@@ -56,6 +56,9 @@ const tree = categoryOrder.map((key) => ({
       <a href={`${base}/promise/`.replace(/\/+/g, '/')}>{t.promise}</a>
       <a href={`${base}/notice/`.replace(/\/+/g, '/')}>{t.notice}</a>
     </nav>
+    <a href={`${base || ''}/`.replace(/\/+/g, '/')} class="site-title" aria-label="あなぐる">
+      <ruby>索<rt>あなぐる</rt></ruby>
+    </a>
     <nav class="site-locale-nav" aria-label="language switcher">
       <a href={switchLocalePath(pathname, 'ja')} class:list={['locale-link', { 'is-active': locale === 'ja' }]}>JA</a>
       <a href={switchLocalePath(pathname, 'en')} class:list={['locale-link', { 'is-active': locale === 'en' }]}>EN</a>
