@@ -4,7 +4,7 @@ import { glob } from 'astro/loaders';
 const categorySchema = z.enum(['life', 'tech', 'business', 'research']);
 
 const posts = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/content/posts/public" }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
