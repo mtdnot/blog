@@ -3,8 +3,36 @@ import Base from '../layouts/Base.astro';
 
 const products = [
   {
-    name: '準備中',
-    note: 'ここに公開しているプロダクトを並べていきます。',
+    name: 'AI Chat Application',
+    note: 'AI-powered chat platform using OpenAI API',
+    links: [
+      { label: 'Live Demo', href: 'https://chat.mtdnot.dev/' },
+      { label: 'GitHub', href: 'https://github.com/mtdnot/AIChatApp' },
+    ],
+  },
+  {
+    name: 'CNC Pen Plotter',
+    note: 'Mechanical device using G-code',
+    links: [
+      { label: 'Demo Video', href: 'https://www.youtube.com/watch?v=cvTdwgvXVYw' },
+    ],
+  },
+  {
+    name: 'Fractal Tree',
+    note: 'Using OpenGL to render recursive structures',
+    links: [
+      { label: 'Demo Video', href: 'https://youtu.be/BvySqiAc7FI' },
+    ],
+  },
+  {
+    name: '部活ウェブサイト',
+    note: '高校時代の部活サイトやアプリ類。',
+    links: [
+      { label: 'NCC', href: 'https://apps.mtdnot.dev/ncc/' },
+      { label: 'AI chat with live2d', href: 'https://apps.mtdnot.dev/chat/' },
+      { label: 'chart8（三重県内の医療と過疎）', href: 'https://apps.mtdnot.dev/chart8/' },
+      { label: 'wordcounter', href: 'https://apps.mtdnot.dev/wordcounter/' },
+    ],
   },
 ];
 ---
@@ -21,6 +49,11 @@ const products = [
         <article class="catalog-card">
           <h2>{product.name}</h2>
           <p>{product.note}</p>
+          <div class="catalog-links">
+            {product.links.map((link) => (
+              <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+            ))}
+          </div>
         </article>
       ))}
     </div>
@@ -61,5 +94,12 @@ const products = [
   .catalog-card h2 {
     font-size: 1rem;
     margin-bottom: 0.45rem;
+  }
+
+  .catalog-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 0.9rem;
   }
 </style>

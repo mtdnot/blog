@@ -3,8 +3,12 @@ import Base from '../../layouts/Base.astro';
 
 const slideItems = [
   {
-    name: 'Coming soon',
-    note: 'This page is for slides and materials that are hard to express well as PDF or on SpeakerDeck.',
+    name: 'Intro myself LT',
+    href: 'https://apps.mtdnot.dev/apps/intromyselfLTrevealjs/',
+  },
+  {
+    name: '大LT',
+    href: 'https://apps.mtdnot.dev/apps/%E5%A4%A7LTrevealjs4up/#/',
   },
 ];
 ---
@@ -18,10 +22,9 @@ const slideItems = [
 
     <div class="catalog-grid">
       {slideItems.map((item) => (
-        <article class="catalog-card">
+        <a class="catalog-card catalog-link-card" href={item.href} target="_blank" rel="noreferrer">
           <h2>{item.name}</h2>
-          <p>{item.note}</p>
-        </article>
+        </a>
       ))}
     </div>
   </section>
@@ -41,8 +44,7 @@ const slideItems = [
     margin-bottom: 0.75rem;
   }
 
-  .catalog-header p,
-  .catalog-card p {
+  .catalog-header p {
     color: #b8b8b8;
   }
 
@@ -58,8 +60,18 @@ const slideItems = [
     padding: 1rem 1.1rem;
   }
 
+  .catalog-link-card {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .catalog-link-card:hover {
+    text-decoration: none;
+    border-color: #4a4a4a;
+    background: #1b1b1b;
+  }
+
   .catalog-card h2 {
     font-size: 1rem;
-    margin-bottom: 0.45rem;
   }
 </style>
