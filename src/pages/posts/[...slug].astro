@@ -17,11 +17,37 @@ const { Content } = await render(post);
 <Base title={post.data.title}>
   <article>
     <header class="post-header">
+      {post.data.thumbnail ? (
+        <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
+      ) : (
+        <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">no image</div>
+      )}
       <h1>{post.data.title}</h1>
-      <div class="post-date">{post.data.date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</div>
+      <div class="post-date">{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</div>
     </header>
     <div class="post-content">
       <Content />
     </div>
   </article>
 </Base>
+
+<style>
+  .post-thumb {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #2f2f2f;
+    background: #1c1c1c;
+    margin-bottom: 1rem;
+  }
+
+  .post-thumb-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6f6f6f;
+    font-size: 3rem;
+  }
+</style>

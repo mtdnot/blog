@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="利用表記 - mtdnot blog" description="このサイトで利用しているフォントとフレームワークの表記。">
+  <article class="notice-page">
+    <h1>利用表記</h1>
+    <p>このサイトでは以下のフォント・ソフトウェアを利用しています。</p>
+
+    <section>
+      <h2>フォント</h2>
+      <p>本文フォントとして <strong>03スマートフォントUI / SmartFontUI</strong> を使用しています。</p>
+      <p>配布元の ReadMe に基づき、SmartFontUI は IPAexゴシックをベースにした OpenType フォントとして案内されています。</p>
+    </section>
+
+    <section>
+      <h2>フレームワーク</h2>
+      <p>このサイトは <strong>Astro</strong> を使って構築しています。</p>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .notice-page {
+    max-width: 720px;
+  }
+
+  .notice-page h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .notice-page h2 {
+    font-size: 1.1rem;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .notice-page p {
+    color: #b8b8b8;
+    margin-bottom: 0.75rem;
+  }
+</style>

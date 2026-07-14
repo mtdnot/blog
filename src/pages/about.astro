@@ -3,6 +3,10 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="About - mtdnot blog">
+  <div class="author-card">
+    <img src="/avatar.png" alt="mtdnot" class="avatar">
+    <div class="author-name">mtdnot</div>
+  </div>
   <h1>About</h1>
   <p>mtdnotの技術ブログです。</p>
   <p>AI、複雑系、NixOS、マルチエージェントシステムなどについて書いています。</p>
@@ -14,3 +18,23 @@ import Base from '../layouts/Base.astro';
     <li><a href="https://x.com/mtdnot">X (Twitter)</a></li>
   </ul>
 </Base>
+
+<style>
+  .author-card {
+    margin-bottom: 2rem;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .author-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+</style>

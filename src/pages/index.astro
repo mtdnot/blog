@@ -1,37 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getDocuments, getProjects } from '../lib/directus';
+import { getCollection } from 'astro:content';
 
-// L0のみ取得
-const allDocs = await getDocuments();
-const publicDocs = allDocs.filter(d => d.clearance === 0 && d.project_id);
-
-// プロジェクト名マップ
-const projects = await getProjects();
-const projectMap = new Map(projects.map(p => [p.id, p.name]));
-
-// 日付でソート
-const sortedDocs = publicDocs.sort((a, b) => 
-  new Date(b.date_created).getTime() - new Date(a.date_created).getTime()
-);
+const posts = await getCollection('posts');
+const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <Base title="mtdnot blog">
   <div class="post-list">
-    <h1>公開記事</h1>
-    {sortedDocs.length === 0 ? (
-      <p class="empty">公開記事がありません</p>
+    {sortedPosts.length === 0 ? (
+      <p class="empty">記事がありません</p>
     ) : (
-      sortedDocs.map(doc => (
+      sortedPosts.map(post => (
         <article class="post-item">
-          <h2><a href={`/article/${doc.slug}`}>{doc.title}</a></h2>
-          {doc.summary && <p class="post-excerpt">{doc.summary}</p>}
-          <div class="post-meta">
-            <span class="post-date">{new Date(doc.date_created).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')}</span>
-            {doc.project_id && (
-              <span class="post-project">{projectMap.get(doc.project_id)}</span>
+          <a href={`/posts/${post.id}/`} class="post-link">
+            {post.data.thumbnail ? (
+              <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
+            ) : (
+              <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">no image</div>
             )}
-          </div>
+            <div class="post-copy">
+              <h2>{post.data.title}</h2>
+              {post.data.description && <p class="post-excerpt">{post.data.description}</p>}
+              <div class="post-meta">
+                <span class="post-date">{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</span>
+              </div>
+            </div>
+          </a>
         </article>
       ))
     )}
@@ -39,10 +34,6 @@ const sortedDocs = publicDocs.sort((a, b) =>
 </Base>
 
 <style>
-  .post-list h1 {
-    margin-bottom: 1.5rem;
-  }
-  
   .empty {
     color: #666;
     text-align: center;
@@ -59,17 +50,45 @@ const sortedDocs = publicDocs.sort((a, b) =>
     border-bottom: none;
   }
   
+  .post-link {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    text-decoration: none;
+  }
+
+  .post-thumb {
+    width: 108px;
+    height: 108px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #1c1c1c;
+    border: 1px solid #2f2f2f;
+  }
+
+  .post-thumb-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6f6f6f;
+    font-size: 2rem;
+  }
+
+  .post-copy {
+    min-width: 0;
+  }
+
   .post-item h2 {
     margin: 0 0 0.5rem;
     font-size: 1.25rem;
   }
   
-  .post-item h2 a {
+  .post-item h2 {
     color: #fff;
-    text-decoration: none;
   }
   
-  .post-item h2 a:hover {
+  .post-link:hover h2 {
     color: #6db3f2;
   }
   
@@ -89,12 +108,16 @@ const sortedDocs = publicDocs.sort((a, b) =>
     color: #666;
     font-size: 0.85rem;
   }
-  
-  .post-project {
-    background: #2a4a6a;
-    color: #8bc4ff;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
+
+  @media (max-width: 640px) {
+    .post-link {
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .post-thumb {
+      width: 80px;
+      height: 80px;
+    }
   }
 </style>

@@ -1,54 +1,57 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getDocuments } from '../../lib/directus';
-import { marked } from 'marked';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const docs = await getDocuments();
-  const publicDocs = docs.filter(d => d.clearance === 0);
-  return publicDocs.map(doc => ({
-    params: { slug: doc.slug },
-    props: { doc }
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post }
   }));
 }
 
-const { doc } = Astro.props;
-
-// Directus画像URLをローカルパスに変換
-let content = doc.content || '';
-content = content.replace(
-  /https:\/\/directus\.mtdnot\.dev\/assets\/([a-f0-9-]+)/g,
-  '/images/directus/$1.png'
-);
-
-// OGP画像を決定（優先順位: cover_image > 最初の画像 > デフォルト）
-let ogImage = '';
-if (doc.cover_image) {
-  // cover_imageがあればそれを使用
-  ogImage = `https://blog.mtdnot.dev/images/directus/${doc.cover_image}.png`;
-} else {
-  // なければ記事内の最初の画像を自動抽出
-  const imageMatch = content.match(/!\[.*?\]\((\/images\/[^)]+)\)/);
-  if (imageMatch) {
-    ogImage = `https://blog.mtdnot.dev${imageMatch[1]}`;
-  }
-}
-
-const html = marked.parse(content);
+const { post } = Astro.props;
+const { Content } = await render(post);
 ---
 
-<Base title={doc.title} description={doc.summary || ''} image={ogImage}>
+<Base title={post.data.title} description={post.data.description || ''}>
   <article class="post-content">
     <header class="post-header">
-      <h1>{doc.title}</h1>
-      {doc.summary && <p class="summary">{doc.summary}</p>}
-      <time>{new Date(doc.date_created).toLocaleDateString('ja-JP')}</time>
+      {post.data.thumbnail ? (
+        <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
+      ) : (
+        <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">no image</div>
+      )}
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="summary">{post.data.description}</p>}
+      <time>{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</time>
     </header>
-    <div class="content" set:html={html} />
+    <div class="content">
+      <Content />
+    </div>
   </article>
 </Base>
 
 <style>
+  .post-thumb {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #2f2f2f;
+    background: #1c1c1c;
+    margin-bottom: 1rem;
+  }
+
+  .post-thumb-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6f6f6f;
+    font-size: 3rem;
+  }
+
   .post-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
