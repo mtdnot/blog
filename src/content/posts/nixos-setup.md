@@ -2,6 +2,7 @@
 title: "NixOSで再現可能な開発環境を作る"
 date: 2026-03-16
 description: "NixOSとHome Managerを使った開発環境構築のメモ。flakeベースの設定管理。"
+category: "tech"
 tags: ["nixos", "linux"]
 ---
 

@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import { categoryMeta, categoryOrder } from '../lib/categories';
+import { getLocaleFromPath, localeBase, switchLocalePath, ui } from '../lib/i18n';
 interface Props {
   title?: string;
   description?: string;
@@ -7,13 +10,24 @@ interface Props {
 }
 
 const { title = 'mtdnot blog', description = '', image = '' } = Astro.props;
-const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const siteUrl = 'https://blog.mtdnot.dev';
 const ogImage = image || `${siteUrl}/avatar.png`;
+const pathname = Astro.url.pathname;
+const locale = getLocaleFromPath(pathname);
+const t = ui[locale];
+const base = localeBase(locale);
+const allPosts = await getCollection('posts');
+const tree = categoryOrder.map((key) => ({
+  key,
+  label: categoryMeta[key].label[locale],
+  posts: allPosts
+    .filter((post) => post.data.category === key)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+}));
 ---
 
 <!DOCTYPE html>
-<html lang="ja">
+<html lang={locale}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,13 +51,53 @@ const ogImage = image || `${siteUrl}/avatar.png`;
 <body>
   <header class="site-header">
     <nav class="site-nav">
-      <a href={base}>ホーム</a>
-      <a href={`${base}about/`}>About</a>
-      <a href={`${base}promise/`}>約束</a>
-      <a href={`${base}notice/`}>利用表記</a>
+      <a href={`${base || ''}/`.replace(/\/+/g, '/')}>{t.home}</a>
+      <a href={`${base}/about/`.replace(/\/+/g, '/')}>{t.about}</a>
+      <a href={`${base}/promise/`.replace(/\/+/g, '/')}>{t.promise}</a>
+      <a href={`${base}/notice/`.replace(/\/+/g, '/')}>{t.notice}</a>
+    </nav>
+    <nav class="site-locale-nav" aria-label="language switcher">
+      <a href={switchLocalePath(pathname, 'ja')} class:list={['locale-link', { 'is-active': locale === 'ja' }]}>JA</a>
+      <a href={switchLocalePath(pathname, 'en')} class:list={['locale-link', { 'is-active': locale === 'en' }]}>EN</a>
     </nav>
   </header>
   <div class="container">
+    <aside class="tree-sidebar">
+      <div class="tree-root">
+        <a href={`${base || ''}/`.replace(/\/+/g, '/')} class:list={['tree-root-link', { 'is-active': pathname === '/' || pathname === '/en/' }]}>
+          {t.allPosts}
+        </a>
+      </div>
+      <div class="tree-groups">
+        {tree.map((group) => {
+          const categoryPath = `${base}/${group.key}/`.replace(/\/+/g, '/');
+          const postPathPrefix = `${base}/posts/`.replace(/\/+/g, '/');
+          const articlePathPrefix = `${base}/article/`.replace(/\/+/g, '/');
+          const isCategoryActive = pathname.startsWith(categoryPath) || pathname.startsWith(postPathPrefix) || pathname.startsWith(articlePathPrefix);
+          return (
+            <details class="tree-group" open={isCategoryActive}>
+              <summary>
+                <a href={categoryPath} class:list={['tree-category-link', { 'is-active': pathname.startsWith(categoryPath) }]}>
+                  {group.label}
+                </a>
+              </summary>
+              <ul class="tree-posts">
+                {group.posts.map((post) => (
+                  <li>
+                    <a
+                      href={`${base}/posts/${post.id}/`.replace(/\/+/g, '/')}
+                      class:list={['tree-post-link', { 'is-active': pathname === `${base}/posts/${post.id}/`.replace(/\/+/g, '/') || pathname === `${base}/article/${post.id}/`.replace(/\/+/g, '/') }]}
+                    >
+                      {post.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          );
+        })}
+      </div>
+    </aside>
     <main class="main">
       <slot />
     </main>

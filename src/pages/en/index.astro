@@ -1,23 +1,25 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { ui } from '../../lib/i18n';
 
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const t = ui.en;
 ---
 
 <Base title="mtdnot blog">
   <div class="post-list">
     {sortedPosts.length === 0 ? (
-      <p class="empty">記事がありません</p>
+      <p class="empty">No posts yet.</p>
     ) : (
       sortedPosts.map((post) => (
         <article class="post-item">
-          <a href={`/posts/${post.id}/`} class="post-link">
+          <a href={`/en/posts/${post.id}/`} class="post-link">
             {post.data.thumbnail ? (
               <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
             ) : (
-              <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">no image</div>
+              <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">{t.noImage}</div>
             )}
             <div class="post-copy">
               <h2>{post.data.title}</h2>

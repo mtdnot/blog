@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { categoryMeta, categoryOrder, type CategoryKey } from '../../lib/categories';
+
+export async function getStaticPaths() {
+  return categoryOrder.map((category) => ({
+    params: { category },
+  }));
+}
+
+const { category } = Astro.params as { category: CategoryKey };
+const meta = categoryMeta[category];
+const posts = (await getCollection('posts'))
+  .filter((post) => post.data.category === category)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Base title={`${meta.label.ja} - mtdnot blog`} description={meta.description.ja}>
+  <div class="category-page">
+    <nav class="crumbs">
+      <a href="/">ホーム</a>
+      <span>/</span>
+      <span>{meta.label.ja}</span>
+    </nav>
+
+    <div class="category-heading">
+      <h1>{meta.label.ja}</h1>
+      <p>{meta.description.ja}</p>
+    </div>
+
+    {posts.length === 0 ? (
+      <p class="empty">記事がありません</p>
+    ) : (
+      <div class="post-list">
+        {posts.map((post) => (
+          <article class="post-item">
+            <a href={`/posts/${post.id}/`} class="post-link">
+              {post.data.thumbnail ? (
+                <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
+              ) : (
+                <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">no image</div>
+              )}
+              <div class="post-copy">
+                <h2>{post.data.title}</h2>
+                {post.data.description && <p class="post-excerpt">{post.data.description}</p>}
+                <div class="post-meta">
+                  <span class="post-date">{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+</Base>
+
+<style>
+  .crumbs {
+    display: flex;
+    gap: 0.45rem;
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .crumbs a {
+    color: #7d7d7d;
+    text-decoration: none;
+  }
+
+  .category-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .category-heading h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .category-heading p {
+    color: #8b8b8b;
+  }
+
+  .empty {
+    color: #666;
+    padding: 2rem 0;
+  }
+
+  .post-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .post-item:last-child {
+    border-bottom: none;
+  }
+
+  .post-link {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    text-decoration: none;
+  }
+
+  .post-thumb {
+    width: 108px;
+    height: 108px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #1c1c1c;
+    border: 1px solid #2f2f2f;
+  }
+
+  .post-thumb-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6f6f6f;
+    font-size: 1rem;
+  }
+
+  .post-copy {
+    min-width: 0;
+  }
+
+  .post-item h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: #fff;
+  }
+
+  .post-link:hover h2 {
+    color: #6db3f2;
+  }
+
+  .post-excerpt {
+    color: #888;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .post-date {
+    color: #666;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    .post-link {
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .post-thumb {
+      width: 80px;
+      height: 80px;
+    }
+  }
+</style>

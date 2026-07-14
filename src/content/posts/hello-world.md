@@ -2,6 +2,7 @@
 title: "ブログ始めました"
 date: 2026-03-17
 description: "mtdnotの技術ブログを開設しました。AI、複雑系、NixOSなどについて書いていきます。"
+category: "tech"
 tags: ["misc"]
 ---
 
