@@ -9,7 +9,11 @@ interface Props {
   image?: string;
 }
 
-const { title = 'mtdnot blog', description = '', image = '' } = Astro.props;
+const { title = '索', description = '', image = '' } = Astro.props;
+const siteTitle = '索|blog';
+const formattedTitle = title === '索'
+  ? siteTitle
+  : `${title.replace(/\s*-\s*索$/, '')} | ${siteTitle}`;
 const siteUrl = 'https://blog.mtdnot.dev';
 const ogImage = image || `${siteUrl}/avatar.png`;
 const pathname = Astro.url.pathname;
@@ -31,19 +35,20 @@ const tree = categoryOrder.map((key) => ({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
+  <title>{formattedTitle}</title>
   <meta name="description" content={description} />
+  <link rel="icon" type="image/png" href="/avatar.png" />
   
   <!-- OGP -->
-  <meta property="og:title" content={title} />
+  <meta property="og:title" content={formattedTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="mtdnot blog" />
+  <meta property="og:site_name" content={siteTitle} />
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
+  <meta name="twitter:title" content={formattedTitle} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
   

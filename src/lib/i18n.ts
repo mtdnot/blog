@@ -29,8 +29,8 @@ export const ui = {
   ja: {
     home: 'ホーム',
     about: '私について',
-    products: 'Products',
-    slides: 'Slides',
+    products: 'プロダクト',
+    slides: 'スライド',
     promise: '約束',
     notice: '利用表記',
     allPosts: '記事一覧',
