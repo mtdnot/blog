@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+
+const products = [
+  {
+    name: '準備中',
+    note: 'ここに公開しているプロダクトを並べていきます。',
+  },
+];
+---
+
+<Base title="Products - 索" description="mtdnot が公開しているプロダクトの一覧。">
+  <section class="catalog-page">
+    <header class="catalog-header">
+      <h1>Products</h1>
+      <p>公開しているアプリやプロダクトをまとめるページです。</p>
+    </header>
+
+    <div class="catalog-grid">
+      {products.map((product) => (
+        <article class="catalog-card">
+          <h2>{product.name}</h2>
+          <p>{product.note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .catalog-page {
+    max-width: 760px;
+  }
+
+  .catalog-header {
+    margin-bottom: 2rem;
+  }
+
+  .catalog-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .catalog-header p,
+  .catalog-card p {
+    color: #b8b8b8;
+  }
+
+  .catalog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .catalog-card {
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    background: #171717;
+    padding: 1rem 1.1rem;
+  }
+
+  .catalog-card h2 {
+    font-size: 1rem;
+    margin-bottom: 0.45rem;
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+
+const slideItems = [
+  {
+    name: '準備中',
+    note: 'SpeakerDeck や PDF では表現しづらいスライドや実験的な資料をここに置きます。',
+  },
+];
+---
+
+<Base title="Slides - 索" description="PDF では表現しづらいスライドや資料の一覧。">
+  <section class="catalog-page">
+    <header class="catalog-header">
+      <h1>Slides</h1>
+      <p>PDF では表現しづらいスライドや、動きのある資料を置くためのページです。</p>
+    </header>
+
+    <div class="catalog-grid">
+      {slideItems.map((item) => (
+        <article class="catalog-card">
+          <h2>{item.name}</h2>
+          <p>{item.note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .catalog-page {
+    max-width: 760px;
+  }
+
+  .catalog-header {
+    margin-bottom: 2rem;
+  }
+
+  .catalog-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .catalog-header p,
+  .catalog-card p {
+    color: #b8b8b8;
+  }
+
+  .catalog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .catalog-card {
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    background: #171717;
+    padding: 1rem 1.1rem;
+  }
+
+  .catalog-card h2 {
+    font-size: 1rem;
+    margin-bottom: 0.45rem;
+  }
+</style>

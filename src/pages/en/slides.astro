@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const slideItems = [
+  {
+    name: 'Coming soon',
+    note: 'This page is for slides and materials that are hard to express well as PDF or on SpeakerDeck.',
+  },
+];
+---
+
+<Base title="Slides - 索" description="A list of slides and materials that work better outside PDF.">
+  <section class="catalog-page">
+    <header class="catalog-header">
+      <h1>Slides</h1>
+      <p>This page is for slides with motion, interaction, or structure that do not fit PDF well.</p>
+    </header>
+
+    <div class="catalog-grid">
+      {slideItems.map((item) => (
+        <article class="catalog-card">
+          <h2>{item.name}</h2>
+          <p>{item.note}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .catalog-page {
+    max-width: 760px;
+  }
+
+  .catalog-header {
+    margin-bottom: 2rem;
+  }
+
+  .catalog-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .catalog-header p,
+  .catalog-card p {
+    color: #b8b8b8;
+  }
+
+  .catalog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .catalog-card {
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    background: #171717;
+    padding: 1rem 1.1rem;
+  }
+
+  .catalog-card h2 {
+    font-size: 1rem;
+    margin-bottom: 0.45rem;
+  }
+</style>
