@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 import { categoryMeta } from '../../../lib/categories';
+import Toc from '../../../components/Toc.astro';
 import { ui } from '../../../lib/i18n';
 
 export async function getStaticPaths() {
@@ -13,32 +14,35 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const category = categoryMeta[post.data.category];
 const t = ui.en;
 ---
 
 <Base title={post.data.title}>
-  <article>
-    <header class="post-header">
-      <nav class="crumbs">
-        <a href="/en/">Home</a>
-        <span>/</span>
-        <a href={`/en/${post.data.category}/`}>{category.label.en}</a>
-        <span>/</span>
-        <span>{post.data.title}</span>
-      </nav>
-      {post.data.thumbnail ? (
-        <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
-      ) : (
-        <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">{t.noImage}</div>
-      )}
-      <h1>{post.data.title}</h1>
-      <div class="post-date">{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</div>
-    </header>
-    <div class="post-content">
-      <Content />
+  <article class="post-layout">
+    <div class="post-main">
+      <header class="post-header">
+        <nav class="crumbs">
+          <a href="/en/">Home</a>
+          <span>/</span>
+          <a href={`/en/${post.data.category}/`}>{category.label.en}</a>
+          <span>/</span>
+          <span>{post.data.title}</span>
+        </nav>
+        {post.data.thumbnail ? (
+          <img src={post.data.thumbnail} alt={post.data.title} class="post-thumb" />
+        ) : (
+          <div class="post-thumb post-thumb-fallback" aria-label="thumbnail missing">{t.noImage}</div>
+        )}
+        <h1>{post.data.title}</h1>
+        <div class="post-date">{`${post.data.date.getFullYear()}:${String(post.data.date.getMonth() + 1).padStart(2, '0')}:${String(post.data.date.getDate()).padStart(2, '0')}`}</div>
+      </header>
+      <div class="post-content">
+        <Content />
+      </div>
     </div>
+    <Toc headings={headings} title={t.toc} />
   </article>
 </Base>
 

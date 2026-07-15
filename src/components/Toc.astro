@@ -1,0 +1,28 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: Heading[];
+  title: string;
+}
+
+const { headings = [], title } = Astro.props;
+const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+{tocItems.length > 0 && (
+  <aside class="toc-panel" aria-label={title}>
+    <div class="toc-title">{title}</div>
+    <ol class="toc-list">
+      {tocItems.map((heading) => (
+        <li class:list={['toc-item', `depth-${heading.depth}`]}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ol>
+  </aside>
+)}
