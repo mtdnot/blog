@@ -405,12 +405,21 @@ a:hover {
 
 .toc-item a {
   color: #787878;
-  font-size: 0.82rem;
   line-height: 1.45;
+}
+
+.toc-item.depth-2 a {
+  color: #b7b7b7;
+  font-size: 0.9rem;
 }
 
 .toc-item.depth-3 {
   padding-left: 0.85rem;
+}
+
+.toc-item.depth-3 a {
+  color: #737373;
+  font-size: 0.78rem;
 }
 
 .post-content .embed-card {
