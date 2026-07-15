@@ -69,14 +69,18 @@ function transformNode(node) {
 
     return parts.filter(Boolean).map((part) => {
       const match = part.match(/^!\[\[([^\]]+)\]\]$/);
-      if (!match || !imagePaths[match[1]]) {
+      if (!match) return { type: 'text', value: part };
+
+      const rawKey = match[1];
+      const cleanKey = rawKey.replace(/\|.*$/, '');
+      if (!imagePaths[cleanKey]) {
         return { type: 'text', value: part };
       }
 
       return {
         type: 'image',
-        url: imagePaths[match[1]],
-        alt: match[1],
+        url: imagePaths[cleanKey],
+        alt: rawKey,
       };
     });
   });
