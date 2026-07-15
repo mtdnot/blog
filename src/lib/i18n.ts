@@ -27,7 +27,7 @@ export function switchLocalePath(pathname: string, target: Locale): string {
 
 export const ui = {
   ja: {
-    home: 'ホーム',
+    home: 'ブログ',
     about: '私について',
     products: 'プロダクト',
     slides: 'スライド',
