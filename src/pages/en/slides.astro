@@ -1,5 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getSpeakerDeckEmbeds, speakerDeckProfileUrl } from '../../lib/speakerdeck';
+
+const speakerDeckEmbeds = await getSpeakerDeckEmbeds();
 
 const slideItems = [
   {
@@ -27,6 +30,28 @@ const slideItems = [
         </a>
       ))}
     </div>
+
+    <section class="speakerdeck-section">
+      <div class="section-heading">
+        <h2>SpeakerDeck</h2>
+        <a href={speakerDeckProfileUrl} target="_blank" rel="noreferrer">speakerdeck.com/mtdnot</a>
+      </div>
+
+      <div class="speakerdeck-grid">
+        {speakerDeckEmbeds.map((item) => (
+          <article class="speakerdeck-card">
+            <h3>{item.title}</h3>
+            {item.html ? (
+              <div class="speakerdeck-embed" set:html={item.html} />
+            ) : (
+              <a class="speakerdeck-fallback" href={item.url} target="_blank" rel="noreferrer">
+                Open on SpeakerDeck
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
   </section>
 </Base>
 
@@ -51,6 +76,7 @@ const slideItems = [
   .catalog-grid {
     display: grid;
     gap: 1rem;
+    margin-bottom: 2.4rem;
   }
 
   .catalog-card {
@@ -73,5 +99,65 @@ const slideItems = [
 
   .catalog-card h2 {
     font-size: 1rem;
+  }
+
+  .speakerdeck-section {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .section-heading h2 {
+    font-size: 1.2rem;
+  }
+
+  .section-heading a {
+    color: #8b8b8b;
+    font-size: 0.9rem;
+  }
+
+  .speakerdeck-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .speakerdeck-card {
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    background: #171717;
+    padding: 1rem 1.1rem;
+  }
+
+  .speakerdeck-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .speakerdeck-embed :global(iframe) {
+    display: block;
+    width: 100%;
+    min-height: 420px;
+    border: 0;
+    border-radius: 10px;
+    background: #101010;
+  }
+
+  .speakerdeck-fallback {
+    display: inline-flex;
+    align-items: center;
+    min-height: 3rem;
+  }
+
+  @media (max-width: 720px) {
+    .speakerdeck-embed :global(iframe) {
+      min-height: 280px;
+    }
   }
 </style>
