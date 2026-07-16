@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import remarkObsidianBreaks from './scripts/remark-obsidian-breaks.mjs';
 import remarkObsidianImages from './scripts/remark-obsidian-images.mjs';
 
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
     format: 'directory'
   },
   markdown: {
-    remarkPlugins: [remarkObsidianImages],
+    remarkPlugins: [remarkObsidianImages, remarkObsidianBreaks],
     shikiConfig: {
       theme: 'github-dark'
     }
