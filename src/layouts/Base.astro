@@ -11,9 +11,7 @@ interface Props {
 
 const { title = '索', description = '', image = '' } = Astro.props;
 const siteTitle = '索|blog';
-const formattedTitle = title === '索'
-  ? siteTitle
-  : `${title.replace(/\s*-\s*索$/, '')} | ${siteTitle}`;
+const formattedTitle = title.replace(/\s*\|\s*索\|blog$/, '').replace(/\s*-\s*索$/, '');
 const siteUrl = 'https://blog.mtdnot.dev';
 const ogImage = image || `${siteUrl}/avatar.png`;
 const pathname = Astro.url.pathname;
