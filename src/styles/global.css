@@ -304,8 +304,10 @@ a:hover {
 
 .post-content {
   min-width: 0;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Times New Roman", serif;
   line-height: 1.9;
   font-size: 16px;
+  font-feature-settings: "palt" 1;
 }
 
 .post-content img {
@@ -452,15 +454,15 @@ a:hover {
 }
 
 .toc-item.depth-3 {
-  padding-left: 1.1rem;
+  padding-left: 2.4rem;
 }
 
 .toc-item.depth-3::before {
   content: "";
   position: absolute;
-  left: 0.3rem;
+  left: 1.2rem;
   top: 0.45rem;
-  width: 0.45rem;
+  width: 0.7rem;
   border-top: 1px solid #3b3b3b;
 }
 
@@ -470,15 +472,15 @@ a:hover {
 }
 
 .toc-item.depth-4 {
-  padding-left: 2rem;
+  padding-left: 4.8rem;
 }
 
 .toc-item.depth-4::before {
   content: "";
   position: absolute;
-  left: 0.75rem;
+  left: 3.4rem;
   top: 0.45rem;
-  width: 0.55rem;
+  width: 0.8rem;
   border-top: 1px solid #343434;
 }
 
