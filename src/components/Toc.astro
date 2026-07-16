@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { headings = [], title } = Astro.props;
-const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 4);
+const tocItems = headings.filter((heading) => heading.depth >= 1 && heading.depth <= 4);
 ---
 
 {tocItems.length > 0 && (
