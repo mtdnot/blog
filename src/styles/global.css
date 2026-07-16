@@ -429,7 +429,12 @@ a:hover {
   gap: 0.45rem;
 }
 
+.toc-item {
+  position: relative;
+}
+
 .toc-item a {
+  display: block;
   color: #787878;
   line-height: 1.45;
 }
@@ -441,7 +446,16 @@ a:hover {
 }
 
 .toc-item.depth-3 {
-  padding-left: 0.95rem;
+  padding-left: 1.1rem;
+}
+
+.toc-item.depth-3::before {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  top: 0.45rem;
+  width: 0.45rem;
+  border-top: 1px solid #3b3b3b;
 }
 
 .toc-item.depth-3 a {
@@ -450,7 +464,16 @@ a:hover {
 }
 
 .toc-item.depth-4 {
-  padding-left: 1.7rem;
+  padding-left: 2rem;
+}
+
+.toc-item.depth-4::before {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.45rem;
+  width: 0.55rem;
+  border-top: 1px solid #343434;
 }
 
 .toc-item.depth-4 a {
