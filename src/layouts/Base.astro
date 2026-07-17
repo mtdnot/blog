@@ -113,5 +113,49 @@ const tree = categoryOrder.map((key) => ({
   <footer class="site-footer">
     <div class="site-footer-inner">©mtdnot</div>
   </footer>
+  <div class="image-lightbox" hidden aria-hidden="true">
+    <button class="image-lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="image-lightbox-image" alt="">
+  </div>
+  <script is:inline>
+    const lightbox = document.querySelector('.image-lightbox');
+    const lightboxImage = lightbox?.querySelector('.image-lightbox-image');
+    const closeButton = lightbox?.querySelector('.image-lightbox-close');
+
+    const openLightbox = (image) => {
+      if (!lightbox || !lightboxImage) return;
+      lightboxImage.src = image.currentSrc || image.src;
+      lightboxImage.alt = image.alt || '';
+      lightbox.hidden = false;
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('lightbox-open');
+    };
+
+    const closeLightbox = () => {
+      if (!lightbox || !lightboxImage) return;
+      lightbox.hidden = true;
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+      lightboxImage.alt = '';
+      document.body.classList.remove('lightbox-open');
+    };
+
+    document.querySelectorAll('.post-content img, .content img').forEach((image) => {
+      image.classList.add('zoomable-image');
+      image.addEventListener('click', () => openLightbox(image));
+    });
+
+    closeButton?.addEventListener('click', closeLightbox);
+    lightbox?.addEventListener('click', (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox && !lightbox.hidden) {
+        closeLightbox();
+      }
+    });
+  </script>
 </body>
 </html>
