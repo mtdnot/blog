@@ -3,7 +3,7 @@ title: "アオタケkickoff 参加記"
 date: 2026-07-18
 description: "アオタケkickoff 参加記"
 category: "life"
-thumbnail: "/images/aotake-kickoff/file-20260718215617550.png"
+thumbnail: "/images/aotake-kickoff/file-20260718220856253.png"
 tags: ["aotake", "startup", "mentoring", "sendai"]
 ---
 
