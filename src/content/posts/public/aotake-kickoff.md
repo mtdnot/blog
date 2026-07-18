@@ -6,9 +6,8 @@ category: "life"
 thumbnail: "/images/aotake-kickoff/file-20260718215617550.png"
 tags: ["aotake", "startup", "mentoring", "sendai"]
 ---
-![file-20260718215617550.png](/images/aotake-kickoff/file-20260718215617550.png)
-↑唯一残っていた写真
 
+![file-20260718220856253.png](/images/aotake-kickoff/file-20260718220856253.png)
 7/18 アオタケのkickoffがありました。
 初めての仙台、思ったより都会で驚きました。
 
@@ -59,4 +58,5 @@ Githubは特に強くなかったのですが、Speakerdeckというスライド
 電車が郡山につきそうです。そろそろ書き終えます。
 よくアオタケ通ったなって自分でも思います。市場規模とか一切考えてなかったですし。自分で言うのもなんですが、技術枠で通ったのかなと思います。アオタケがビジネス重視だったら一次選考で落ちていたでしょう。
 
-写真何も撮ってなかった。反省
+![file-20260718215617550.png](/images/aotake-kickoff/file-20260718215617550.png)
+↑先輩とのツーショット。ウェイ
