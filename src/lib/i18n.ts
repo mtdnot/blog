@@ -29,8 +29,9 @@ export const ui = {
   ja: {
     home: 'ブログ',
     about: '私について',
-    products: 'プロダクト',
-    slides: 'スライド',
+      products: 'プロダクト',
+      slides: 'スライド',
+      archive: 'アーカイブ',
     promise: '約束',
     notice: '利用表記',
     allPosts: '記事一覧',
@@ -43,8 +44,9 @@ export const ui = {
   en: {
     home: 'Home',
     about: 'About',
-    products: 'Products',
-    slides: 'Slides',
+      products: 'Products',
+      slides: 'Slides',
+      archive: 'Archive',
     promise: 'Promise',
     notice: 'Credits',
     allPosts: 'All posts',
