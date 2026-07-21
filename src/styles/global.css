@@ -118,6 +118,15 @@ a:hover {
   font-size: 12px;
   letter-spacing: .03em;
   text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.site-counter {
+  display: block;
+  max-width: min(100%, 360px);
+  height: auto;
 }
 
 .tree-sidebar {
