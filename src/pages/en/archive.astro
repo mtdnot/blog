@@ -1,13 +1,36 @@
 ---
 import Base from '../../layouts/Base.astro';
+
+const sections = [
+  {
+    title: 'High school',
+    items: [
+      { label: 'AI chat with live2d', href: 'https://apps.mtdnot.dev/apps/chat/' },
+      { label: 'chart8 (medical care and depopulation in Mie)', href: 'https://apps.mtdnot.dev/apps/chart8/' },
+      { label: 'wordcounter', href: 'https://apps.mtdnot.dev/apps/wordcounter/' },
+      { label: 'NCC', href: 'https://apps.mtdnot.dev/apps/ncc/' },
+      { label: 'AI Chat Application', href: 'https://chat.mtdnot.dev/' },
+      { label: 'CNC Pen Plotter', href: 'https://www.youtube.com/watch?v=cvTdwgvXVYw' },
+      { label: 'Fractal Tree', href: 'https://youtu.be/BvySqiAc7FI' },
+    ],
+  },
+];
 ---
 
 <Base title="Archive">
   <h1>Archive</h1>
-  <p>Past projects and older public items are collected on the archive side.</p>
-  <p>
-    <a href="https://cycletree.org/archive/" target="_blank" rel="noopener noreferrer">
-      Open the cycletree archive
-    </a>
-  </p>
+  <p>Older public items that are no longer in the main list are collected here.</p>
+
+  {sections.map((section) => (
+    <section>
+      <h2>{section.title}</h2>
+      <ul>
+        {section.items.map((item) => (
+          <li>
+            <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 </Base>
