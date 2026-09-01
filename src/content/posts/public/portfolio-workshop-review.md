@@ -6,7 +6,6 @@ category: "life"
 thumbnail: "/images/portfolio-workshop-review/file-20260717004413108.png"
 tags: ["portfolio", "zli", "workshop", "university"]
 ---
-
 こんにちは、ナツと申します。
 自己紹介に関しては、ポートフォリオ作ったのでリンク切れてなければ是非[こちら](https://mtdnot.dev/u-aizu_portfolio/)をご覧ください。
 先日、Zli部員としてポートフォリオ作成勉強会を開催しました。

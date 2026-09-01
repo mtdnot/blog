@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "sync:obsidian": "node scripts/sync-obsidian-posts.mjs",
+    "build": "npm run sync:obsidian && astro build",
     "preview": "astro preview",
-    "deploy": "astro build && wrangler pages deploy dist"
+    "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.0",

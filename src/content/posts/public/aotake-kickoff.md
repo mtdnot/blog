@@ -6,7 +6,6 @@ category: "life"
 thumbnail: "/images/aotake-kickoff/file-20260718220856253.png"
 tags: ["aotake", "startup", "mentoring", "sendai"]
 ---
-
 ![file-20260718220856253.png](/images/aotake-kickoff/file-20260718220856253.png)
 7/18 アオタケのkickoffがありました。
 初めての仙台、思ったより都会で驚きました。

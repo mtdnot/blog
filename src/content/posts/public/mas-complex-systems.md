@@ -6,7 +6,6 @@ category: "tech"
 thumbnail: "/images/mas-complex-systems/file-20260716201514020.png"
 tags: ["mas", "multi-agent", "complex-systems", "ai", "research"]
 ---
-
 こんにちは、皆さんいかがお過ごしでしょうか。
 私はエナドリ片手に夜を過ごしています。
 数日後にとあるKickoffイベントがあるのですが、不安が多いので考え事をすることで気を持とうとしています。
@@ -116,10 +115,10 @@ A.頭の中で小さな、複数の自己を作り会話させているので実
 
 ## 社会の生まれる原理とAIへの類推
 
-<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-  <img src="/images/mas-complex-systems/file-20260716211357841.png" alt="file-20260716211357841.png" style="flex: 1; min-width: 280px; max-width: 48%; height: auto; border-radius: 8px;">
-  <img src="/images/mas-complex-systems/file-20260716211344372.png" alt="file-20260716211344372.png" style="flex: 1; min-width: 280px; max-width: 48%; height: auto; border-radius: 8px;">
-</div>
+（このブログを編集するAIへの指示：この2枚の画像を左右に横に配置してください。）
+
+![file-20260716211357841.png](/images/mas-complex-systems/file-20260716211357841.png)
+![file-20260716211344372.png](/images/mas-complex-systems/file-20260716211344372.png)
 
 個人では生まれない現象があります。例えば経済は一人では発生しませんよね。広く言えば社会は複数の人間の相互作用によって生じる現象と言えます。
 
