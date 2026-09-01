@@ -10,7 +10,7 @@ https://blog.mtdnot.dev
 
 - 同期: `npm run sync:obsidian`
 - ローカル確認: `npm run dev`
-- デプロイ: `npm run deploy`
+- 公開: `main` に push すると GitHub Actions から Cloudflare Pages に自動デプロイされる
 
 新規記事は Obsidian 側ノートの先頭に最低限これを入れる。
 

@@ -6,15 +6,11 @@
     "dev": "astro dev",
     "sync:obsidian": "node scripts/sync-obsidian-posts.mjs",
     "build": "npm run sync:obsidian && astro build",
-    "preview": "astro preview",
-    "deploy": "npm run build && wrangler pages deploy dist"
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.0",
     "astro": "^5.0.0",
     "marked": "^17.0.5"
-  },
-  "devDependencies": {
-    "wrangler": "^4.0.0"
   }
 }
